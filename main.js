@@ -9,7 +9,7 @@ require("electron-reload")(__dirname);
 const { autoUpdater } = require("electron-updater");
 autoUpdater.checkForUpdatesAndNotify();
 
-const isFirstRun = require('electron-first-run')();
+const isFirstRun = require("electron-first-run")();
 
 debug();
 
@@ -81,6 +81,6 @@ ipcMain.on("setOnTop", (_, val) => {
   mainWindow.setAlwaysOnTop(val, "screen-saver", 0);
 });
 
-ipcMain.on("getIsFirstRun", (e) => {
+ipcMain.on("getIsFirstRun", e => {
   e.returnValue = isFirstRun;
 });
