@@ -1,0 +1,5 @@
+{
+  "in": "*.css",
+  "out": "app.fixed.min.css",
+  "browsers": ["last 3 Chrome versions"]
+}

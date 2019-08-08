@@ -1,0 +1,115 @@
+input {
+  font-size: 16px;
+  line-height: 26px;
+  padding: 14px 12px 12px;
+  width: calc(100% - 32px);
+}
+
+input,
+select,
+textarea {
+  border: var(--grey) 1px solid;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  transition: border var(--medium-transition);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border: var(--dark-grey) 1px solid;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border: var(--darkest-grey) 1px solid;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+select {
+  font-size: 16px;
+  line-height: 26px;
+  padding: 15.5px;
+  width: calc(100% - 32px);
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+button.main {
+  position: relative;
+  border: none;
+  background: var(--main-accent);
+  padding-right: 60px;
+}
+
+button {
+  position: relative;
+  border: none;
+  background: var(--contrast-background);
+  color: #f1f1f1;
+  line-height: 26px;
+  font-size: 18px;
+  padding: 17px 20px 11px 16px;
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0, 0, 0.1, 1);
+}
+
+button.main:not(:disabled):hover {
+  background: var(--main-accent-darker);
+}
+
+button.main:not(:disabled):hover {
+  background: var(--main-accent-darker);
+}
+
+button.main:not(:disabled):active {
+  background: var(--main-accent-darkest);
+}
+
+button:not(:disabled):active {
+  transform: translateY(3px);
+}
+
+button::after {
+  content: "";
+  background: var(--contrast-background);
+
+  position: absolute;
+  height: 3px;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+
+  transform: all 0.15s cubic-bezier(0, 0, 0.1, 1);
+}
+
+button:active::after {
+  transform: translateY(-3px);
+}
+
+button:disabled {
+  background: #666;
+  color: var(--grey);
+  cursor: not-allowed;
+}
+
+button:disabled::after {
+  background: var(--dark-grey);
+}
+
+textarea {
+  font: 16px "Hanken Grotesk", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  resize: none;
+  font-size: 16px;
+  line-height: 26px;
+  padding: 15.5px;
+  width: calc(100% - 32px);
+}

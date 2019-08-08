@@ -1,0 +1,47 @@
+{
+  "name": "vnas-toolbox",
+  "version": "0.1.0",
+  "description": "The Virtual Norwegian Toolbox",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "repository": "https://github.com/davwheat/VNAS-Toolbox",
+  "keywords": [
+    "Electron",
+    "Norwegian",
+    "discord",
+    "vnas"
+  ],
+  "author": {
+    "name": "David Wheatley",
+    "email": "davidwheatley@gmail.com",
+    "url": "https://github.com/davwheat"
+  },
+  "devDependencies": {
+    "electron": "^6.0.0",
+    "electron-builder": "^21.2.0"
+  },
+  "dependencies": {
+    "@iconfu/svg-inject": "^1.2.3",
+    "custom-electron-titlebar": "^3.1.0",
+    "discord-rich-presence": "0.0.8",
+    "discord-rpc": "^3.0.2",
+    "electron-debug": "^3.0.1",
+    "electron-first-run": "^2.0.0",
+    "electron-ga": "^1.0.6",
+    "electron-reload": "^1.5.0",
+    "electron-settings": "^3.2.0",
+    "electron-updater": "^4.1.2",
+    "fsuipc": "^0.3.0",
+    "jquery": "^3.4.1",
+    "metar": "^1.0.0",
+    "overlayscrollbars": "^1.9.1",
+    "register-scheme": "github:devsnek/node-register-scheme",
+    "update-electron-app": "^1.5.0",
+    "uuid": "^3.3.2"
+  }
+}

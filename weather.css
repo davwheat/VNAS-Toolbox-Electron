@@ -1,0 +1,49 @@
+#Weather > #weatherData {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 27px 2px 1fr 28px 1fr;
+  grid-template-areas:
+    "labelArea ."
+    ". ."
+    "textboxArea mainButton"
+    ". ."
+    "leftButton rightButton";
+  column-gap: 16px;
+}
+
+#Weather > div {
+  border: 1px solid var(--grey);
+  background: var(--light-grey);
+  padding: 24px;
+  width: 90%;
+  margin: auto;
+  margin-top: 12px;
+}
+
+#Weather > #weatherData > label {
+  grid-area: labelArea;
+}
+
+#Weather > #weatherData > input {
+  grid-area: textboxArea;
+  width: calc(100% - 26px);
+}
+
+#Weather > #weatherData > button.main {
+  grid-area: mainButton;
+  text-align: left;
+}
+
+#Weather > #weatherData > #depWeatherBtn {
+  grid-area: leftButton;
+  text-align: left;
+}
+
+#Weather > #weatherData > #arrWeatherBtn {
+  grid-area: rightButton;
+  text-align: left;
+}
+
+#Weather textarea {
+  height: calc(100vh - 385px);
+}

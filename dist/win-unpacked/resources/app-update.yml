@@ -1,0 +1,4 @@
+owner: davwheat
+repo: VNAS-Toolbox
+provider: github
+updaterCacheDirName: vnas-toolbox-updater

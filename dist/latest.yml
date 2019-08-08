@@ -1,0 +1,8 @@
+version: 1.0.0
+files:
+  - url: VNAS-Toolbox-Setup-1.0.0.exe
+    sha512: D+vJOZXzYTNQasN7OcMQtHhcNKQ65JqA/Krv1ChNgvIRvbRuAyrV8kiyl3ViwGiaL1eyMp3oGnHiy76JScAJMg==
+    size: 46752940
+path: VNAS-Toolbox-Setup-1.0.0.exe
+sha512: D+vJOZXzYTNQasN7OcMQtHhcNKQ65JqA/Krv1ChNgvIRvbRuAyrV8kiyl3ViwGiaL1eyMp3oGnHiy76JScAJMg==
+releaseDate: '2019-08-08T20:33:42.587Z'

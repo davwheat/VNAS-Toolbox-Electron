@@ -1,0 +1,9 @@
+directories:
+  output: dist
+  buildResources: build
+productName: VNAS Toolbox
+appId: 'davwheat.vnastoolbox,'
+win:
+  publish:
+    - github
+electronVersion: 6.0.0

@@ -1,0 +1,7 @@
+{
+  "python.linting.enabled": false,
+  "runOnSave.commands": [{ "command": "pleeease compile",
+    "runIn": "terminal",
+    "runningStatusMessage": "Compiling CSS with Pleeease...",
+    "finishStatusMessage": "Finished compiling CSS!" }]
+}
