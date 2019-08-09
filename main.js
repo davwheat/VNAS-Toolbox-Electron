@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, session } = require("electron");
+
 const path = require("path");
 // DevTools and refresh
 const debug = require("electron-debug");
@@ -22,9 +23,10 @@ app.on("browser-window-created", function(e, window) {
 let mainWindow;
 
 function createWindow() {
+  session.defaultSession.on("will-download", onDownload);
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 900,
+    width: 950,
     height: 700,
     minWidth: 800,
     minHeight: 600,
@@ -35,12 +37,13 @@ function createWindow() {
       defaultFontFamily: '"Segoe UI", sans-serif',
       nodeIntegration: true,
       // to allow displaying of PDFs
-      plugins: true
+      plugins: true,
+      webviewTag: true
     }
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile("index.html");
+  mainWindow.loadFile("src/index.html");
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -52,6 +55,21 @@ function createWindow() {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+}
+
+function onDownload(event, item, webContents) {
+  console.log("onDownload");
+  // Prevent from downloading pdf file.
+  if (
+    item.getMimeType() == "application/pdf" &&
+    item.getURL().indexOf("blob:file:") != 0
+  ) {
+    event.preventDefault();
+    BrowserWindow.getFocusedWindow().loadFile(
+      path.resolve(__dirname, "pdfjs/web/viewer.html")
+    );
+    //mainWindow.loadUrl(path.resolve(__dirname, "pdfjs/web/viewer.html"));
+  }
 }
 
 // This method will be called when Electron has finished

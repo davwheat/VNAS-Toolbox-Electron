@@ -1,0 +1,19 @@
+<div id="weatherData">
+  <label for="weatherIcaoTextbox" id="weatherTextboxLabel">ICAO Code</label>
+  <input
+    type="text"
+    id="weatherIcaoTextbox"
+    maxlength="4"
+    class="uppercase"
+    placeholder="ENGM"
+  />
+
+  <button class="main" id="icaoWeatherBtn">Fetch METAR for ICAO</button>
+  <button id="depWeatherBtn">Departure METAR</button>
+  <button id="arrWeatherBtn">Arrival METAR</button>
+</div>
+<div>
+  <textarea id="decodedMetarBox" readonly></textarea>
+</div>
+
+<script src="weather.js"></script>

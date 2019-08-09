@@ -1,0 +1,106 @@
+#Charts {
+  height: 100%;
+}
+
+#Charts > div {
+  border: 1px solid var(--grey);
+  background: var(--light-grey);
+  padding: 24px;
+  width: 90%;
+  max-width: 750px;
+  margin: auto;
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 27px 2px 1fr 28px 1fr;
+  grid-template-areas:
+    "labelArea attribution"
+    ". ."
+    "textboxArea mainButton"
+    ". ."
+    "leftButton rightButton";
+  column-gap: 16px;
+}
+
+#chartsFrame {
+  width: calc(95%);
+  margin: auto;
+  border: 1px solid var(--grey);
+  background: var(--light-grey);
+  display: block;
+  margin-top: 16px;
+  min-height: 500px;
+  height: 84vh;
+}
+
+#Charts > div > label {
+  grid-area: labelArea;
+}
+
+#Charts > div > #chartsIcaoInputContainer {
+  width: 100%;
+  position: relative;
+  grid-area: textboxArea;
+}
+
+#Charts > div > #chartsIcaoInputContainer > input {
+  width: calc(100% - 26px);
+}
+
+#Charts > div > button.main {
+  grid-area: mainButton;
+  text-align: left;
+}
+
+#Charts > div > #depChartsBtn {
+  grid-area: leftButton;
+  text-align: left;
+}
+
+#Charts > div > #arrChartsBtn {
+  grid-area: rightButton;
+  text-align: left;
+}
+
+/* #chartsIcaoTextboxAutocomplete {
+} */
+
+div.autocomplete {
+  position: absolute;
+  width: 100%;
+  border: var(--dark-grey) 1px solid;
+  background: var(--light-grey);
+  display: none;
+  z-index: 100;
+}
+
+div.autocomplete ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+div.autocomplete li {
+  list-style-type: none;
+  margin: 0;
+  padding: 18px 20px;
+  width: calc(100% - 40px);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+div.autocomplete li:focus,
+div.autocomplete li:hover {
+  background: var(--grey);
+}
+
+div.autocomplete li:not(:last-child) {
+  border-bottom: var(--dark-grey) 1px solid;
+}
+
+input.autocompleteInput[type="text"]:focus + div.autocomplete,
+div.autocomplete:hover,
+div.autocomplete:focus-within {
+  display: block;
+}

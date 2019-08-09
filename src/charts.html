@@ -1,0 +1,33 @@
+<div>
+  <label for="chartsIcaoTextbox" id="chartsTextboxLabel">ICAO Code</label>
+
+  <p style="grid-area:attribution;margin:0;text-align:right;font-size:12px">
+    Charts provided by
+    <a
+      href="#"
+      onclick='require("electron").shell.openExternal("https://chartfox.org");'
+      >ChartFox</a
+    >
+  </p>
+
+  <div id="chartsIcaoInputContainer">
+    <input
+      type="text"
+      id="chartsIcaoTextbox"
+      maxlength="4"
+      class="uppercase autocompleteInput"
+      placeholder="ENGM"
+    />
+    <div id="chartsIcaoTextboxAutocomplete" class="autocomplete">
+      <ul>
+        <li tabindex="0">Start typing...</li>
+      </ul>
+    </div>
+  </div>
+
+  <button class="main" id="icaoChartsBtn">Fetch charts for ICAO</button>
+  <button id="depChartsBtn">Departure airport charts</button>
+  <button id="arrChartsBtn">Arrival airport charts</button>
+</div>
+
+<script src="charts.js"></script>

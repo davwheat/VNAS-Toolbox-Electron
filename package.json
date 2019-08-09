@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "electron-builder --win --x64",
+    "publish": "electron-builder --win --x64 -p always",
     "postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/davwheat/VNAS-Toolbox",
@@ -40,6 +41,7 @@
     "jquery": "^3.4.1",
     "metar": "^1.0.0",
     "overlayscrollbars": "^1.9.1",
+    "pdf.js": "^0.1.0",
     "register-scheme": "github:devsnek/node-register-scheme",
     "update-electron-app": "^1.5.0",
     "uuid": "^3.3.2"
