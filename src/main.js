@@ -1,22 +1,22 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, session } = require("electron");
-
+const { app, BrowserWindow, webFrame, session } = require("electron");
 const path = require("path");
+
 // DevTools and refresh
-const debug = require("electron-debug");
+require("electron-debug")();
 // Auto reload
-require("electron-reload")(__dirname);
+require("electron-reload")(__dirname + "\\src");
 
 const { autoUpdater } = require("electron-updater");
 autoUpdater.checkForUpdatesAndNotify();
 
 const isFirstRun = require("electron-first-run")();
 
-debug();
-
 app.on("browser-window-created", function(e, window) {
   window.setMenu(null);
 });
+
+let allWindows = [];
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -32,13 +32,9 @@ function createWindow() {
     minHeight: 600,
     frame: false,
     webPreferences: {
-      // devTools: false,
       navigateOnDragDrop: false,
       defaultFontFamily: '"Segoe UI", sans-serif',
-      nodeIntegration: true,
-      // to allow displaying of PDFs
-      plugins: true,
-      webviewTag: true
+      nodeIntegration: true
     }
   });
 
@@ -65,10 +61,23 @@ function onDownload(event, item, webContents) {
     item.getURL().indexOf("blob:file:") != 0
   ) {
     event.preventDefault();
-    BrowserWindow.getFocusedWindow().loadFile(
-      path.resolve(__dirname, "pdfjs/web/viewer.html")
-    );
-    //mainWindow.loadUrl(path.resolve(__dirname, "pdfjs/web/viewer.html"));
+
+    let nw = new BrowserWindow({
+      width: 900,
+      height: 600,
+      minWidth: 500,
+      minHeight: 500,
+      frame: false,
+      webPreferences: {
+        navigateOnDragDrop: false,
+        defaultFontFamily: '"Segoe UI", sans-serif'
+      }
+    });
+
+    let encodedUrl = encodeURIComponent(item.getURL());
+    nw.loadFile(path.resolve("src/pdfjs/web/viewer.html"));
+    allWindows.push(nw);
+    //mainWindow.loadUrl(path.resolve("pdfjs/web/viewer.html"));
   }
 }
 
