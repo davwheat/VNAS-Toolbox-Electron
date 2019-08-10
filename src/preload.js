@@ -4,9 +4,13 @@
 const customTitlebar = require("custom-electron-titlebar");
 const OverlayScrollbars = require("overlayscrollbars");
 
-const titlebar = new customTitlebar.Titlebar({
-  backgroundColor: customTitlebar.Color.fromHex("#d81939"),
-  menu: null
+let titlebar;
+
+$(() => {
+  titlebar = new customTitlebar.Titlebar({
+    backgroundColor: customTitlebar.Color.fromHex("#d81939"),
+    menu: null
+  });
 });
 
 window.addEventListener("DOMContentLoaded", () => {

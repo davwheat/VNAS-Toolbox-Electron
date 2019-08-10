@@ -1,4 +1,6 @@
 const airportData = require("./airports.json");
+const NaxAirports = require("./nax_airports.json");
+
 const ipcRenderer = require("electron").ipcRenderer;
 
 function GetAirportInfo(icao) {
@@ -89,7 +91,7 @@ function CreatePopUp({
               .remove();
           }
         });
-        resolve(true);
+      resolve(true);
     });
 
     $("button#modalCloseButton").click(() => {
@@ -103,7 +105,7 @@ function CreatePopUp({
               .remove();
           }
         });
-        resolve(false);
+      resolve(false);
     });
   });
 }

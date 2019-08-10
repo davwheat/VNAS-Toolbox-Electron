@@ -3,30 +3,19 @@
 
   const ApiBaseUrl = "https://chartfox.org/api";
 
-  const InterfaceBaseUrl = `${ApiBaseUrl}/interface/charts/`;
-  const InterfaceQueryString = "?token=" + ChartFoxInterface;
+  // const InterfaceBaseUrl = `${ApiBaseUrl}/interface/charts/`;
+  // const InterfaceQueryString = "?token=" + ChartFoxInterface;
 
-  const $Frame = $("#chartsFrame");
+  // const $Frame = $("#chartsFrame");
   const $ChartsIcaoBox = $("#chartsIcaoTextbox");
 
   const $ChartsButton = $("#icaoChartsBtn");
 
   $ChartsIcaoBox.keydown(e => {
-    var keycode = event.keyCode ? event.keyCode : event.which;
-    if (keycode == "13") { // enter
+    var key = event.key;
+    if (key == "Enter") {
       $ChartsButton.click();
-      return true;
-    } else if (keycode == "40") {
-      $("#chartsIcaoTextboxAutocomplete li:first-child")[0].focus();
-      return true;
     }
-  });
-
-  $ChartsIcaoBox.on("input", () => {
-    $("#chartsIcaoTextboxAutocomplete").html("<li>Loading...</li>");
-    GetSupportedAirports($ChartsIcaoBox.value()).then(val => {
-      SetAutoComplete(val.airports);
-    });
   });
 
   $ChartsButton.click(() => {
@@ -48,7 +37,7 @@
       return;
     }
 
-    $Frame.attr("src", `${InterfaceBaseUrl}${icao}${InterfaceQueryString}`);
+    // $Frame.attr("src", `${InterfaceBaseUrl}${icao}${InterfaceQueryString}`);
   });
 
   $("#depChartsBtn").click(() => {
@@ -99,10 +88,10 @@
     $ChartsButton.click();
   });
 
-  function GetSupportedAirports(particalIcao = "") {
+  function GetAllCharts(icao) {
     return Promise.resolve(
       $.post(
-        `${ApiBaseUrl}/airports/fullsupport/${particalIcao}`,
+        `${ApiBaseUrl}/charts/grouped/${icao}`,
         { token: ChartFoxPrivate },
         null,
         "json"
@@ -110,16 +99,64 @@
     );
   }
 
-  function SetAutoComplete(airports) {
-    console.log(airports);
-
-    let h = "";
-
-    airports.every((val, i) => {
-      h += `<li tabindex="0" data-value="${val}">${val}</li>`;
-      return i != 4;
+  function GetUkChartUrl(pseudoUrl) {
+    $.ajax({
+      url: pseudoUrl,
+      async: false
     });
+  }
 
-    $("#chartsIcaoTextboxAutocomplete").html(h);
+  function ProcessCharts(input) {
+    const charts = input.charts;
+
+    let AllCharts = {
+      "Unknown/General": [],
+      "Textual Data": [],
+      "Ground Layout": [],
+      SID: [],
+      STAR: [],
+      Approach: [],
+      Transition: [],
+      "Pilot Briefing": []
+    };
+
+    console.log(charts);
+
+    for (const i in charts) {
+      if (charts.hasOwnProperty(i)) {
+        const chartGroup = charts[i];
+
+        console.log("group");
+        console.log(chartGroup);
+
+        for (const chart of chartGroup.charts) {
+          console.log("chart");
+          console.log(chart);
+
+          let goodUrl = charts.url;
+          if (goodUrl == null) {
+            $.get({
+              url: "https://immense-tor-37206.herokuapp.com/" + chart.pseudo_url
+            }).then(_, __, response => {
+              AllCharts[chart.type].push({
+                name: chart.name,
+                id: chart.identifier,
+                type: chart.type,
+                runway: chart.runway,
+                url: response.url
+              });
+            });
+          } else {
+            AllCharts[chart.type].push({
+              name: chart.name,
+              id: chart.identifier,
+              type: chart.type,
+              runway: chart.runway,
+              url: charts.url || GetUkChartUrl(chart.pseudo_url)
+            });
+          }
+        }
+      }
+    }
   }
 }

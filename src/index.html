@@ -4,6 +4,9 @@
     <script src="analytics.js"></script>
     <script src="jquery.js"></script>
 
+    <script src="preload.js"></script>
+    <script src="common.js"></script>
+
     <meta charset="UTF-8" />
     <title>VNAS Toolbox</title>
 
@@ -89,28 +92,40 @@
         <div id="FlightDetails">
           <div style="grid-area: top-left">
             <label for="FromIcaoTextbox">Fly from</label>
-            <input
-              id="FromIcaoTextbox"
-              type="text"
-              placeholder="EGKK"
-              tabindex="0"
-              maxlength="4"
-              class="uppercase"
-              oninput='IcaoEntryHints(this, "depIcaoHint")'
-            />
+            <div style="position:relative;width: 100%;">
+              <input
+                id="FromIcaoTextbox"
+                type="text"
+                placeholder="EGKK"
+                tabindex="0"
+                maxlength="4"
+                class="uppercase icaoAutocompleteInput"
+                oninput='IcaoEntryHints(this, "depIcaoHint")'
+              />
+              <div
+                id="fromAutocomplete"
+                class="icaoAutocompleteContainer autocomplete"
+              ></div>
+            </div>
             <p class="icaoHint" id="depIcaoHint"></p>
           </div>
           <div style="grid-area: top-right; position: relative;">
             <label for="ToIcaoTextbox">Fly to</label>
-            <input
-              id="ToIcaoTextbox"
-              type="text"
-              placeholder="EKCH"
-              tabindex="0"
-              maxlength="4"
-              class="uppercase"
-              oninput='IcaoEntryHints(this, "arrIcaoHint")'
-            />
+            <div>
+              <input
+                id="ToIcaoTextbox"
+                type="text"
+                placeholder="EKCH"
+                tabindex="0"
+                maxlength="4"
+                class="uppercase icaoAutocompleteInput"
+                oninput='IcaoEntryHints(this, "arrIcaoHint")'
+              />
+              <div
+                id="toAutocomplete"
+                class="icaoAutocompleteContainer autocomplete"
+              ></div>
+            </div>
             <p class="icaoHint" id="arrIcaoHint"></p>
           </div>
           <div style="grid-area: middle-left; position: relative;">
@@ -185,31 +200,24 @@
         </div>
         <img src="img/logo-light.svg" class="vnasLogo" />
       </section>
-      <section id="LiveInfo" style="display: none">
-      </section>
-      <section id="Charts" style="display: none">
-      </section>
-      <section id="Weather" style="display: none">
-      </section>
+      <section id="LiveInfo" style="display: none"></section>
+      <section id="Charts" style="display: none"></section>
+      <section id="Weather" style="display: none"></section>
       <section id="Settings" style="display: none"></section>
     </main>
 
     <script>
       // Add contents of other HTML files
-      $(() => {
-        $("#LiveInfo").load("LiveInfo.html");
-        $("#Charts").load("charts.html");
-        $("#Weather").load("weather.html");
-        $("#Settings").load("settings.html");
-      });
+      $("#LiveInfo").load("LiveInfo.html");
+      $("#Charts").load("charts.html");
+      $("#Weather").load("weather.html");
+      $("#Settings").load("settings.html");
     </script>
-
-    <script src="preload.js"></script>
-    <script src="common.js"></script>
 
     <script src="flight-setup.js"></script>
 
     <script src="icons.js"></script>
+    <script src="autocomplete.js"></script>
 
     <script>
       $FlightSetupNavButton = $("#FlightSetupSectionButton");
@@ -227,13 +235,13 @@
       $FlightSetupNavButton.click(() => {
         $FlightSetupNavButton.attr("active", "");
 
-        $Setup.fadeIn(250);
-
         $Info
           .add($Charts)
           .add($Weather)
           .add($Settings)
-          .fadeOut(275);
+          .fadeOut(150)
+          .promise()
+          .done(() => $Setup.fadeIn(100));
 
         $FlightInfoNavButton
           .add($ChartsNavButton)
@@ -245,13 +253,13 @@
       $FlightInfoNavButton.click(() => {
         $FlightInfoNavButton.attr("active", "");
 
-        $Info.fadeIn(250);
-
         $Setup
           .add($Charts)
           .add($Weather)
           .add($Settings)
-          .fadeOut(275);
+          .fadeOut(150)
+          .promise()
+          .done(() => $Info.fadeIn(100));
 
         $FlightSetupNavButton
           .add($ChartsNavButton)
@@ -263,13 +271,13 @@
       $ChartsNavButton.click(() => {
         $ChartsNavButton.attr("active", "");
 
-        $Charts.fadeIn(250);
-
         $Setup
           .add($Info)
           .add($Weather)
           .add($Settings)
-          .fadeOut(275);
+          .fadeOut(150)
+          .promise()
+          .done(() => $Charts.fadeIn(100));
 
         $FlightInfoNavButton
           .add($FlightSetupNavButton)
@@ -281,13 +289,13 @@
       $WeatherNavButton.click(() => {
         $WeatherNavButton.attr("active", "");
 
-        $Weather.fadeIn(250);
-
         $Setup
           .add($Info)
           .add($Charts)
           .add($Settings)
-          .fadeOut(275);
+          .fadeOut(150)
+          .promise()
+          .done(() => $Weather.fadeIn(100));
 
         $FlightSetupNavButton
           .add($ChartsNavButton)
@@ -299,13 +307,13 @@
       $SettingsNavButton.click(() => {
         $SettingsNavButton.attr("active", "");
 
-        $Settings.fadeIn(250);
-
         $Setup
           .add($Info)
           .add($Charts)
           .add($Weather)
-          .fadeOut(275);
+          .fadeOut(150)
+          .promise()
+          .done(() => $Settings.fadeIn(100));
 
         $FlightSetupNavButton
           .add($ChartsNavButton)

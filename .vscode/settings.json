@@ -1,7 +1,10 @@
 {
   "python.linting.enabled": false,
   "runOnSave.commands": [{ "command": "pleeease compile",
-    "runIn": "terminal",
+    "runIn": "backend",
     "runningStatusMessage": "Compiling CSS with Pleeease...",
-    "finishStatusMessage": "Finished compiling CSS!" }]
+    "finishStatusMessage": "Finished compiling CSS!"
+  }
+],
+"minify.minifyExistingOnSave": true
 }
