@@ -44,7 +44,6 @@
     "overlayscrollbars": "^1.9.1",
     "pdf.js": "^0.1.0",
     "register-scheme": "github:devsnek/node-register-scheme",
-    "rollup": "^1.19.4",
     "update-electron-app": "^1.5.0",
     "uuid": "^3.3.2"
   }
