@@ -6,5 +6,6 @@
     "finishStatusMessage": "Finished compiling CSS!"
   }
 ],
-"minify.minifyExistingOnSave": true
+"minify.minifyExistingOnSave": true,
+"markdown-table-formatter.limitLastColumnPadding": true
 }
