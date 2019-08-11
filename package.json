@@ -41,6 +41,7 @@
     "fsuipc": "^0.3.0",
     "jquery": "^3.4.1",
     "leaflet": "^1.5.1",
+    "leaflet-rotatedmarker": "^0.2.0",
     "metar": "^1.0.0",
     "npm-watch": "^0.6.0",
     "overlayscrollbars": "^1.9.1",

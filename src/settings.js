@@ -1,25 +1,6 @@
-const settings = require("electron-settings");
-
 const $AllSettingInputs = $(
   "#Settings select[data-setting], #Settings input[data-setting], #Settings textarea[data-setting]"
 );
-
-$.fn.value = function(set = undefined) {
-  if (set != undefined) {
-    if (this.is("input:not([type=checkbox]),textarea,select")) {
-      this.val(set);
-    } else if (this.is("input[type=checkbox]")) {
-      this.prop("checked", !!set);
-    }
-    return this;
-  }
-
-  if (this.is("input:not([type=checkbox]),textarea,select")) {
-    return this.val();
-  } else if (this.is("input[type=checkbox]")) {
-    return this.is(":checked");
-  }
-};
 
 $AllSettingInputs.on("input", () => {
   $AllSettingInputs.each((_, el) => {

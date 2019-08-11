@@ -60,7 +60,7 @@ nav {
   width: 96px;
   background: var(--contrast-background);
   color: var(--dark-text);
-  z-index: 100;
+  z-index: 100000;
 }
 
 nav > ul {

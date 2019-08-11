@@ -1,7 +1,26 @@
+const settings = require("electron-settings");
+
 const airportData = require("./airports.json");
 const NaxAirports = require("./nax_airports.json");
 
 const ipcRenderer = require("electron").ipcRenderer;
+
+$.fn.value = function(set = undefined) {
+  if (set != undefined) {
+    if (this.is("input:not([type=checkbox]),textarea,select")) {
+      this.val(set);
+    } else if (this.is("input[type=checkbox]")) {
+      this.prop("checked", !!set);
+    }
+    return this;
+  }
+
+  if (this.is("input:not([type=checkbox]),textarea,select")) {
+    return this.val();
+  } else if (this.is("input[type=checkbox]")) {
+    return this.is(":checked");
+  }
+};
 
 function GetAirportInfo(icao) {
   // data["name"]
