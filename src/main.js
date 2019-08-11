@@ -16,8 +16,6 @@ app.on("browser-window-created", function(e, window) {
   window.setMenu(null);
 });
 
-let allWindows = [];
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -54,30 +52,12 @@ function createWindow() {
 }
 
 function onDownload(event, item, webContents) {
-  console.log("onDownload");
   // Prevent from downloading pdf file.
   if (
     item.getMimeType() == "application/pdf" &&
     item.getURL().indexOf("blob:file:") != 0
   ) {
     event.preventDefault();
-
-    let nw = new BrowserWindow({
-      width: 900,
-      height: 600,
-      minWidth: 500,
-      minHeight: 500,
-      frame: false,
-      webPreferences: {
-        navigateOnDragDrop: false,
-        defaultFontFamily: '"Segoe UI", sans-serif'
-      }
-    });
-
-    let encodedUrl = encodeURIComponent(item.getURL());
-    nw.loadFile(path.resolve("src/pdfjs/web/viewer.html"));
-    allWindows.push(nw);
-    //mainWindow.loadUrl(path.resolve("pdfjs/web/viewer.html"));
   }
 }
 
