@@ -23,6 +23,7 @@
     "url": "https://github.com/davwheat"
   },
   "devDependencies": {
+    "devtron": "^1.4.0",
     "electron": "^6.0.0",
     "electron-builder": "^21.2.0"
   },
@@ -39,11 +40,13 @@
     "electron-updater": "^4.1.2",
     "fsuipc": "^0.3.0",
     "jquery": "^3.4.1",
+    "leaflet": "^1.5.1",
     "metar": "^1.0.0",
     "npm-watch": "^0.6.0",
     "overlayscrollbars": "^1.9.1",
     "pdf.js": "^0.1.0",
     "register-scheme": "github:devsnek/node-register-scheme",
+    "rollbar": "^2.11.0",
     "update-electron-app": "^1.5.0",
     "uuid": "^3.3.2"
   }
