@@ -1,4 +1,4 @@
-#LiveInfo *:not(h1, h2) {
+#LiveInfo #pfd * {
   font-family: "B612 Mono", monospace !important;
   font-weight: bold !important;
 }

@@ -12,6 +12,8 @@ const $AircraftBox = $("#AircraftSelect");
 
 let FSConnected = false;
 
+let FSObj;
+
 class Flight {
   FlightState;
 
@@ -114,9 +116,11 @@ class Flight {
   }
 
   UpdateData() {
-    if (!FSConnected) return;
+    if (!FSConnected || FSObj == undefined) return;
 
-    FsuipcGetter.process()
+    console.log("Update Data");
+
+    FSObj.process()
       .then(result => {
         const {
           airspeed,
@@ -133,27 +137,33 @@ class Flight {
           vspeed
         } = result;
 
-        this.SpeedKIAS = airspeed / 128;
-        this.SpeedGS = (groundSpeed / 65536) * 1.4384;
-        this.AltitudeASL = (altitudeAsl * 3.28084) / (65536.0 * 65536.0);
-        this.AltitudeAGL = (altitudeAgl * 3.28084) / 65536.0;
-        this.OnGround = onGround != 0;
-        this.ParkingBrakeSet = parkingBrake != 0;
-        this.Latitude = Number(
+        console.log(result);
+
+        console.log((groundSpeed / 65536) * 1.4384);
+
+        myFlight.SpeedKIAS = airspeed / 128;
+        myFlight.SpeedGS = (groundSpeed / 65536) * 1.4384;
+        myFlight.AltitudeASL = (altitudeAsl * 3.28084) / (65536.0 * 65536.0);
+        myFlight.AltitudeAGL = (altitudeAgl * 3.28084) / 65536.0;
+        myFlight.OnGround = onGround != 0;
+        myFlight.ParkingBrakeSet = parkingBrake != 0;
+        myFlight.Latitude = Number(
           ((latitude * 90.0) / (10001750.0 * 65536.0 * 65536.0)).toFixed(6)
         );
-        this.Longitude = Number(
+        myFlight.Longitude = Number(
           (
             (longitude * 360.0) /
             (65536.0 * 65536.0 * 65536.0 * 65536.0)
           ).toFixed(6)
         );
-        this.VerticalSpeed = (vspeed * 60.0 * 3.28084) / 256.0;
-        this.Pitch = -Number(
+        myFlight.VerticalSpeed = (vspeed * 60.0 * 3.28084) / 256.0;
+        myFlight.Pitch = -Number(
           ((pitch * 360.0) / (65536.0 * 65536.0)).toFixed(1)
         );
-        this.Bank = Number(((bank * 360.0) / (65536.0 * 65536.0)).toFixed(1));
-        this.Heading = Number(
+        myFlight.Bank = Number(
+          ((bank * 360.0) / (65536.0 * 65536.0)).toFixed(1)
+        );
+        myFlight.Heading = Number(
           ((heading * 360.0) / (65536.0 * 65536.0)).toFixed(1)
         );
 
@@ -162,9 +172,12 @@ class Flight {
           titlebar.updateTitle();
         }
 
+        console.log(myFlight);
+
         UpdateLiveInfo();
       })
       .catch(() => {
+        console.log("eek");
         FsuipcGetter.close();
       });
   }
@@ -201,7 +214,8 @@ class Flight {
       this.FlightState == this.States.Taxi ||
       ((this.FlightState == this.States.BrowsingFlights ||
         this.FlightState == this.States.Preflight) &&
-        !this.Stationary)
+        !this.Stationary &&
+        this.OnGround)
     );
   }
 
@@ -231,7 +245,7 @@ class Flight {
       this.FlightState == this.FlightStates.Descending ||
       (this.FlightState == this.FlightStates.Cruise &&
         this.FeetUntilCruise >= 1000) ||
-      (this.VerticalSpeed <= 1000 && this.FeetUntilCruise >= 1000)
+      (this.VerticalSpeed <= -1000 && this.FeetUntilCruise >= 1000)
     );
   }
 
@@ -414,6 +428,7 @@ $("#InitialiseDiscordRPCButton").click(() => {
   }
 
   myFlight = new Flight(from, to, cruise, aircraft, new Date().getTime());
+  console.log(myFlight);
 
   if (GetSetting("enable_discord_presence")) {
     rpcInstance.on("ready", () => {
@@ -434,17 +449,20 @@ $("#InitialiseDiscordRPCButton").click(() => {
     rpcInstance.login({ clientId }).catch(console.error);
   }
 
-  setInterval(myFlight.UpdateData, 1000);
+  setInterval(myFlight.UpdateData, 5000);
 
-  setInterval(UpdateMap, 60000);
+  //setInterval(UpdateMap, 60000);
 
   $("#InitialiseDiscordRPCButton").attr("disabled", "");
 });
 
 async function UpdatePresence() {
+  console.log("UpdatePresence()");
+
   if (!GetSetting("enable_discord_presence")) return;
 
   let state = myFlight.FlightState;
+  console.log("State: " + state);
 
   if (myFlight.IsTaxiing) state = myFlight.States.Taxi;
   else if (myFlight.IsTakingOff) state = myFlight.States.Takeoff;
@@ -466,22 +484,26 @@ async function UpdatePresence() {
   if (state == myFlight.States.Taxi)
     stateText += ` @ ${Math.round(myFlight.SpeedGS)} kts`;
   else if (state == myFlight.States.Climb)
-    stateText += `${Math.round(myFlight.AltitudeASL)}ft for ${
+    stateText += ` (${Math.round(myFlight.AltitudeASL)}ft for ${
       myFlight.CruiseFL
-    }`;
+    })`;
   else if (state == myFlight.States.Cruise)
     stateText += ` @ ${Math.round(myFlight.SpeedGS)} kts`;
   else if (state == myFlight.States.Descending)
     stateText = `Descending (${Math.round(myFlight.AltitudeASL)}ft)`;
   else if (state == myFlight.States.Approach)
-    stateText += `${Math.round(myFlight.AltitudeAGL)}ft AGL`;
+    stateText += ` (${Math.round(myFlight.AltitudeAGL)}ft AGL)`;
   else if (state == myFlight.States.LandedAndTaxi)
-    stateText += `Landed ${myFlight.LandedTimestamp}ft AGL`;
+    stateText += `Landed at ${myFlight.LandedTimestamp}`;
 
   if (state != myFlight.state) {
     myFlight.SetState(state);
-    new window.Notification("Flight state updated", `Now: ${stateText}`);
+    new window.Notification("Flight state updated", {
+      body: `Now: ${stateText}`
+    });
   }
+
+  myFlight.state = state;
 
   console.log(`${state} // ${stateText}`);
 
@@ -500,6 +522,8 @@ async function UpdatePresence() {
 }
 
 let attemptConnection = setInterval(() => {
+  if (FSConnected) return;
+
   FsuipcGetter.open()
     .then(obj => {
       obj.add("airspeed", 0x02bc, fsuipc.Type.UInt32);
@@ -518,6 +542,7 @@ let attemptConnection = setInterval(() => {
 
       obj.add("latitude", 0x0560, fsuipc.Type.Int64);
       obj.add("longitude", 0x0568, fsuipc.Type.Int64);
+      FSObj = obj;
     })
     .catch(err => {
       if (err.code == fsuipc.ErrorCode.NOFS) {

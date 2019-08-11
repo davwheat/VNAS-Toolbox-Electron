@@ -52,6 +52,8 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
     return Promise.resolve($.get({ url: VnasLiveMapApiUrl }));
   }
   function PopulateMap() {
+    console.log("Updated live map!");
+
     let temp;
 
     if (typeof myFlight != "undefined") {
@@ -67,9 +69,11 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
         icon: myFlight.AircraftType.startsWith("B78") ? b788 : b738,
         rotationAngle: myFlight.Heading
       }).bindPopup(
-        `You! // ${myFlight.ArrivalIcao} → ${myFlight.DepartureIcao}<br/>${
-          myFlight.AltitudeASL
-        }ft | ${myFlight.SpeedGS}kts | ${myFlight.Heading}°`
+        `You! // ${myFlight.ArrivalIcao} → ${
+          myFlight.DepartureIcao
+        }<br/>${Math.floor(myFlight.AltitudeASL)}ft | ${Math.floor(
+          myFlight.SpeedGS
+        )}kts | ${Math.round(myFlight.Heading)}°`
       );
 
       if (!GetSetting("show_all_vnas_flights_on_map")) {
