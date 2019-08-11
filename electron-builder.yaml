@@ -1,6 +1,6 @@
 
 productName: VNAS Toolbox
-appId: davwheat.vnastoolbox,
+appId: com.github.davwheat.vnastoolbox,
 win:
   publish:
     - github
