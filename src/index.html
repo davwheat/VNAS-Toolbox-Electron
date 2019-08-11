@@ -583,7 +583,11 @@
       <section id="Charts" style="display: none"></section>
       <section id="Weather" style="display: none"></section>
       <section id="LiveMap" style="display: none"></section>
-      <section id="Settings" style="display: none" class="need-scrollbar"></section>
+      <section
+        id="Settings"
+        style="display: none"
+        class="need-scrollbar"
+      ></section>
     </main>
 
     <script>
@@ -679,6 +683,10 @@
 
       $LiveMapNavButton.click(function() {
         $(this).attr("active", "");
+
+        setTimeout(() => {
+          mymap.invalidateSize();
+        }, 300);
 
         $AllPages
           .detach($LiveMap)
