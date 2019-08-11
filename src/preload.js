@@ -11,8 +11,5 @@ $(() => {
     backgroundColor: customTitlebar.Color.fromHex("#d81939"),
     menu: null
   });
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  OverlayScrollbars(document.querySelectorAll(".container-after-titlebar"), {});
+  OverlayScrollbars(document.querySelectorAll(".container-after-titlebar,.need-scrollbar"), {});
 });
