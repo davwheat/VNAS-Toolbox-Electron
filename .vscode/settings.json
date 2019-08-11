@@ -1,11 +1,7 @@
 {
   "python.linting.enabled": false,
-  "runOnSave.commands": [{ "command": "pleeease compile",
-    "runIn": "backend",
-    "runningStatusMessage": "Compiling CSS with Pleeease...",
-    "finishStatusMessage": "Finished compiling CSS!"
-  }
-],
-"minify.minifyExistingOnSave": true,
-"markdown-table-formatter.limitLastColumnPadding": true
+  "minify.minifyExistingOnSave": true,
+  "markdown-table-formatter.limitLastColumnPadding": true,
+  "svgeditor.indentSize": 2,
+  "editor.tabSize": 2
 }

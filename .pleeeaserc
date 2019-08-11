@@ -1,5 +1,9 @@
 {
-  "in": ["src/*.css", "node_modules/overlayscrollbars/css/OverlayScrollbars.min.css"],
+  "in": [
+    "src/*.css",
+    "node_modules/overlayscrollbars/css/OverlayScrollbars.min.css",
+    "node_modules/leaflet/dist/leaflet.css"
+  ],
   "out": "src/app.fixed.min.css",
   "browsers": ["last 3 Chrome versions"]
 }
