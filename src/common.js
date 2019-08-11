@@ -80,7 +80,7 @@ function CreatePopUp({
 
     $("button#modalCloseButton").focus();
 
-    $("button#modalCloseButton").click(() => {
+    $("button#modalSecondaryButton").click(() => {
       $("#modal-dialog")
         .add("#modal-dimmer-overlay")
         .fadeOut({
@@ -91,7 +91,7 @@ function CreatePopUp({
               .remove();
           }
         });
-      resolve(true);
+      resolve(false);
     });
 
     $("button#modalCloseButton").click(() => {
@@ -105,7 +105,7 @@ function CreatePopUp({
               .remove();
           }
         });
-      resolve(false);
+      resolve(true);
     });
   });
 }
