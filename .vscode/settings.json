@@ -3,5 +3,6 @@
   "minify.minifyExistingOnSave": true,
   "markdown-table-formatter.limitLastColumnPadding": true,
   "svgeditor.indentSize": 2,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "editor.renderWhitespace": "boundary"
 }
