@@ -2,17 +2,18 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: stretch;
   align-content: stretch;
   margin: 16px auto;
   padding: 0 32px;
   width: calc(100% - 48px - 64px);
-  height: calc(100vh - 78px);
+  height: calc(100vh - 150px);
+  overflow: auto;
   max-width: 700px;
 }
 
-#Settings > div {
+#Settings .os-content > div {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -27,11 +28,18 @@
   cursor: help;
 }
 
-#resetSettingsBtn {
+#Settings #resetSettingsBtnContainer {
+  display: block;
   position: fixed;
   bottom: 24px;
   z-index: 5;
+  left: 96px;
+  right: 0;
+}
+
+#resetSettingsBtn {
+  display: block;
   max-width: 700px;
   width: 50%;
-  align-self: center;
+  margin: auto;
 }

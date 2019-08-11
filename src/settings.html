@@ -1,8 +1,14 @@
 <h1 style="margin:0 0 24px 0">Settings will automatically save</h1>
-<h3 style="margin:0 0 24px 0;text-align: center"><a href="about.html" target="_blank">About VNAS Toolbox</a></h1>
+<h3 style="margin:0 0 24px 0;text-align: center">
+  <a href="about.html" target="_blank">About VNAS Toolbox</a>
+</h3>
 <div>
   <p>VATSIM CID</p>
   <input type="text" data-setting="vatsim_id" data-default-value="" />
+</div>
+<div>
+  <p>VNAS ID</p>
+  <input type="text" data-setting="vnas_username" data-default-value="NAX" />
 </div>
 <div>
   <p>Enable Discord Status</p>
@@ -60,6 +66,8 @@
     data-default-value="true"
   />
 </div>
-<button id="resetSettingsBtn">Reset settings</button>
+<div id="resetSettingsBtnContainer">
+  <button id="resetSettingsBtn">Reset settings</button>
+</div>
 
 <script src="settings.js"></script>
