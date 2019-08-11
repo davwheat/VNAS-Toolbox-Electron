@@ -61,14 +61,9 @@ function ApplySettings() {
 
 function ResetSettingsToDefaults() {
   $AllSettingInputs.each((_, el) => {
-    if ($(el).is([(type = checkbox)])) {
-      SetSetting(
-        $(el).data("setting"),
-        $(el).data("default-value") == "true" ? true : false
-      );
-    } else {
-      SetSetting($(el).data("setting"), $(el).data("default-value"));
-    }
+    let v = $(el).data("default-value");
+    SetSetting($(el).data("setting"), v);
+    $(el).value(v);
   });
 }
 
