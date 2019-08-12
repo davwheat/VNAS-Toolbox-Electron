@@ -93,7 +93,7 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
 
       Array.from(flights).forEach(flight => {
         // Skip user's own VNAS flight to prevent duplicate markers
-        if (flight.userId.endsWith(GetSetting("vnas_username"))) return;
+        if (flight.userId == GetSetting("vnas_username").substr(3)) return;
 
         markers.push(
           L.marker([flight.aircraft.lat, flight.aircraft.lng], {
