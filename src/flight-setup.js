@@ -118,8 +118,6 @@ class Flight {
   UpdateData() {
     if (!FSConnected || FSObj == undefined) return;
 
-    console.log("Update Data");
-
     FSObj.process()
       .then(result => {
         const {
@@ -136,10 +134,6 @@ class Flight {
           longitude,
           vspeed
         } = result;
-
-        console.log(result);
-
-        console.log((groundSpeed / 65536) * 1.4384);
 
         myFlight.SpeedKIAS = airspeed / 128;
         myFlight.SpeedGS = (groundSpeed / 65536) * 1.4384;
@@ -172,12 +166,9 @@ class Flight {
           titlebar.updateTitle();
         }
 
-        console.log(myFlight);
-
         UpdateLiveInfo();
       })
       .catch(() => {
-        console.log("eek");
         FsuipcGetter.close();
       });
   }
@@ -211,58 +202,79 @@ class Flight {
 
   get IsTaxiing() {
     return (
-      this.FlightState == this.States.Taxi ||
+      (this.FlightState == this.States.Taxi &&
+        !this.IsTakingOff &&
+        !this.IsClimbing &&
+        !this.IsCruising &&
+        !this.IsDescending &&
+        !this.IsOnApproach) ||
       ((this.FlightState == this.States.BrowsingFlights ||
         this.FlightState == this.States.Preflight) &&
-        !this.Stationary &&
-        this.OnGround)
+        !this.Stationary)
     );
   }
 
   get IsTakingOff() {
     return (
-      this.FlightState == this.States.Takeoff ||
-      (this.CurrentStateIsOnGroundAtDepartureAirport && SpeedGS >= 50)
+      (this.FlightState == this.States.Takeoff &&
+        !this.IsClimbing &&
+        !this.IsCruising &&
+        !this.IsDescending &&
+        !this.IsOnApproach) ||
+      (this.CurrentStateIsOnGroundAtDepartureAirport &&
+        this.SpeedGS >= 50 &&
+        this.FlightState == this.States.Taxi)
     );
   }
 
   get IsClimbing() {
     return (
-      this.FlightState == this.FlightStates.Climb || this.AltitudeAGL >= 400
+      (this.FlightState == this.FlightStates.Climb &&
+        !this.IsCruising &&
+        !this.IsDescending &&
+        !this.IsOnApproach) ||
+      (this.AltitudeAGL >= 400 &&
+        this.FeetUntilCruise > 500 &&
+        this.VerticalSpeed >= 100)
     );
   }
 
   get IsCruising() {
     return (
-      this.FlightState == this.FlightStates.Cruise ||
-      (this.FlightState == this.FlightStates.Climb &&
-        this.FeetUntilCruise <= 500)
+      (this.FlightState == this.FlightStates.Cruise &&
+        !this.IsDescending &&
+        !this.IsOnApproach) ||
+      this.FeetUntilCruise <= 500
     );
   }
 
   get IsDescending() {
     return (
-      this.FlightState == this.FlightStates.Descending ||
+      (this.FlightState == this.FlightStates.Descending &&
+        !this.IsOnApproach) ||
       (this.FlightState == this.FlightStates.Cruise &&
         this.FeetUntilCruise >= 1000) ||
-      (this.VerticalSpeed <= -1000 && this.FeetUntilCruise >= 1000)
+      (this.VerticalSpeed <= -1000 &&
+        this.FeetUntilCruise >= 1000 &&
+        this.FlightState != this.States.Approach)
     );
   }
 
   get IsOnApproach() {
     return (
-      this.FlightState == this.FlightStates.Approach ||
-      (this.FlightState == this.FlightStates.Descending &&
-        this.AltitudeAGL <= 8000)
+      (this.FlightState == this.FlightStates.Approach &&
+        this.AltitudeAGL > 100) ||
+      (this.VerticalSpeed <= -500 &&
+        this.AltitudeAGL <= 8000 &&
+        this.AltitudeAGL > 100)
     );
   }
 
   get IsLanded() {
     return (
-      this.FlightState == this.FlightStates.LandedAndTaxi ||
-      (this.FlightState == this.FlightStates.Approach &&
-        this.OnGround &&
-        this.AltitudeAGL <= 50)
+      (this.FlightState == this.FlightStates.LandedAndTaxi &&
+        !this.IsArrivedAtGate) ||
+      (this.FlightState == this.FlightStates.Approach && this.OnGround)
     );
   }
 
@@ -283,7 +295,7 @@ class Flight {
     ].includes(this.FlightState);
   }
 
-  get CurrentStateIsOnGroundAtDepartureAirport() {
+  get CurrentStateIsOnGroundAtArrivalAirport() {
     return [
       this.FlightStates.LandedAndTaxi,
       this.FlightStates.ArrivedAtGate
@@ -428,7 +440,6 @@ $("#InitialiseDiscordRPCButton").click(() => {
   }
 
   myFlight = new Flight(from, to, cruise, aircraft, new Date().getTime());
-  console.log(myFlight);
 
   if (GetSetting("enable_discord_presence")) {
     rpcInstance.on("ready", () => {
@@ -446,7 +457,7 @@ $("#InitialiseDiscordRPCButton").click(() => {
       setInterval(UpdatePresence, 15 * 1000);
     });
 
-    rpcInstance.login({ clientId }).catch(console.error);
+    RPCLogin();
   }
 
   setInterval(myFlight.UpdateData, 5000);
@@ -456,13 +467,19 @@ $("#InitialiseDiscordRPCButton").click(() => {
   $("#InitialiseDiscordRPCButton").attr("disabled", "");
 });
 
-async function UpdatePresence() {
-  console.log("UpdatePresence()");
+function RPCLogin() {
+  rpcInstance.login({ clientId }).catch(() => {
+    console.error;
+    RPCLogin();
+  });
+}
 
+async function UpdatePresence() {
   if (!GetSetting("enable_discord_presence")) return;
 
   let state = myFlight.FlightState;
-  console.log("State: " + state);
+
+  console.log(myFlight);
 
   if (myFlight.IsTaxiing) state = myFlight.States.Taxi;
   else if (myFlight.IsTakingOff) state = myFlight.States.Takeoff;
