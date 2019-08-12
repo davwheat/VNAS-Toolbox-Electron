@@ -1,6 +1,6 @@
 {
   "name": "vnas-toolbox",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The Virtual Norwegian Toolbox",
   "main": "main.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "publish": "electron-builder --win --x64 -p always",
     "postinstall": "electron-builder install-app-deps"
   },
-  "repository": "https://github.com/davwheat/VNAS-Toolbox",
+  "repository": "davwheat/VNAS-Toolbox-Electron",
   "keywords": [
     "Electron",
     "Norwegian",
