@@ -175,7 +175,9 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
 
       mapItems.forEach(marker => {
         if (marker == undefined) return;
-        leafletLiveMap.removeLayer(marker);
+        leafletLiveMap.removeLayer(marker[0]);
+        leafletLiveMap.removeLayer(marker[1]);
+        leafletLiveMap.removeLayer(marker[2]);
       });
 
       Array.from(flights).forEach(flight => {
