@@ -8,7 +8,17 @@ const debug = require("electron-debug");
 require("electron-reload")(__dirname);
 
 const { autoUpdater } = require("electron-updater");
-autoUpdater.checkForUpdatesAndNotify();
+
+autoUpdater.on("update-downloaded", info => {
+  new (_electron()).Notification({
+    title: "A new update is ready to install",
+    body: `VNAS Toolbox version ${
+      it.updateInfo.version
+    } has been downloaded will be automatically installed on exit`
+  }).show();
+});
+
+autoUpdater.checkForUpdates();
 
 const isFirstRun = require("electron-first-run")();
 
