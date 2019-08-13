@@ -1,5 +1,6 @@
 const L = require("leaflet/dist/leaflet");
 require("leaflet-rotatedmarker");
+require("leaflet-arc");
 
 var BingLayer = L.TileLayer.extend({
   getTileUrl: function(tilePoint) {
@@ -45,7 +46,8 @@ function GenerateFlightPopup(
   }`;
 }
 
-let markers = [];
+let mapItems = [];
+let ownFlight;
 
 $("#liveMapToggleVnas").value(GetSetting("show_all_vnas_flights_on_map"));
 
@@ -113,7 +115,7 @@ const leafletLiveMap = L.map("leafletMap", {
   zoom: 8,
   layers: [osm],
   maxBoundsViscosity: 0.5,
-  zoomAnimationThreshold: 19,
+  zoomAnimationThreshold: 19
 });
 leafletLiveMap.setMaxBounds([[-90, -180], [90, 180]]);
 
@@ -140,21 +142,13 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
   function GetAllNorwegianFlightsP() {
     return Promise.resolve($.get({ url: VnasLiveMapApiUrl }));
   }
-  function PopulateMap() {
-    console.log("Updated live map!");
 
-    let temp;
-
+  function AddOwnFlightToMap() {
     if (typeof myFlight != "undefined") {
-      if (!GetSetting("show_all_vnas_flights_on_map")) {
-        markers.forEach(marker => {
-          if (marker == undefined) return;
-          leafletLiveMap.removeLayer(marker);
-        });
-        markers = [];
-      }
+      if (ownFlight != undefined) leafletLiveMap.removeLayer(ownFlight);
+      ownFlight = undefined;
 
-      temp = L.marker([myFlight.Latitude, myFlight.Longitude], {
+      ownFlight = L.marker([myFlight.Latitude, myFlight.Longitude], {
         icon: myFlight.AircraftType.startsWith("B78") ? b788 : b738,
         rotationAngle: myFlight.Heading
       }).bindPopup(
@@ -169,26 +163,26 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
         )
       );
 
-      if (!GetSetting("show_all_vnas_flights_on_map")) {
-        temp.addTo(leafletLiveMap);
-        return;
-      }
+      ownFlight.addTo(leafletLiveMap);
     }
+  }
+
+  function PopulateMap() {
+    console.log("Updated live map!");
 
     GetAllNorwegianFlightsP().then(f => {
       const flights = JSON.parse(f);
 
-      markers.forEach(marker => {
+      mapItems.forEach(marker => {
         if (marker == undefined) return;
         leafletLiveMap.removeLayer(marker);
       });
-      markers = [temp];
 
       Array.from(flights).forEach(flight => {
         // Skip user's own VNAS flight to prevent duplicate markers
         if (flight.userId == GetSetting("vnas_username").substr(3)) return;
 
-        markers.push(
+        mapItems.push([
           L.marker([flight.aircraft.lat, flight.aircraft.lng], {
             icon: flight.aircraft.aircraft.startsWith("B78") ? b788 : b738,
             rotationAngle: flight.aircraft.heading
@@ -204,13 +198,37 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
               flight.userName,
               flight.progress
             )
+          ),
+          L.Polyline.Arc(
+            [flight.dep.lat, flight.dep.lng],
+            [flight.aircraft.lat, flight.aircraft.lng],
+            {
+              color: "#d81939",
+              vertices: 250
+            }
+          ),
+          L.Polyline.Arc(
+            [flight.aircraft.lat, flight.aircraft.lng],
+            [flight.arr.lat, flight.arr.lng],
+            {
+              color: "#d81939",
+              vertices: 250
+            }
           )
-        );
+        ]);
       });
 
-      markers.forEach(marker => {
-        if (marker == undefined) return;
-        marker.addTo(leafletLiveMap);
+      mapItems.forEach(marker => {
+        if (marker[0] == undefined) return;
+        marker[0].on("mouseover", () => {
+          marker[1].addTo(leafletLiveMap);
+          marker[2].addTo(leafletLiveMap);
+        });
+        marker[0].on("mouseout", () => {
+          leafletLiveMap.removeLayer(marker[1]);
+          leafletLiveMap.removeLayer(marker[2]);
+        });
+        marker[0].addTo(leafletLiveMap);
       });
     });
   }
@@ -218,3 +236,4 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
 
 PopulateMap();
 setInterval(PopulateMap, 45 * 1000);
+setInterval(AddOwnFlightToMap, 5 * 1000);
