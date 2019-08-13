@@ -1,6 +1,6 @@
 {
   "name": "vnas-toolbox",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The Virtual Norwegian Toolbox",
   "main": "main.js",
   "scripts": {
