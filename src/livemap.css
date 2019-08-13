@@ -1,0 +1,13 @@
+#leafletMap .leaflet-popup-content {
+  text-align: center !important;
+}
+
+#leafletMap .leaflet-control-layers-list {
+  overflow: hidden;
+  margin-right: 12px;
+  margin-top: 4px;
+}
+
+#leafletMap .leaflet-control-layers-list input {
+  width: min-content;
+}
