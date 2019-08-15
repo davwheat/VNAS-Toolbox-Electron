@@ -1,6 +1,8 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, session } = require("electron");
 
+const isFirstRun = require('electron-first-run')();
+
 const path = require("path");
 // DevTools and refresh
 const debug = require("electron-debug");

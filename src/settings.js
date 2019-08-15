@@ -2,8 +2,6 @@ const $AllSettingInputs = $(
   "#Settings select[data-setting], #Settings input[data-setting], #Settings textarea[data-setting]"
 );
 
-const isFirstRun = require('electron-first-run')();
-
 
 $AllSettingInputs.on("input", () => {
   $AllSettingInputs.each((_, el) => {
@@ -64,4 +62,4 @@ $("#resetSettingsBtn").click(() => {
   });
 });
 
-if (isFirstRun) ResetSettingsToDefaults();
+if (require('electron').remote.getGlobal("isFirstRun")) ResetSettingsToDefaults();
