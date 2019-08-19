@@ -11,3 +11,7 @@
 #leafletMap .leaflet-control-layers-list input {
   width: min-content;
 }
+
+#leafletMap .leaflet-marker-icon.leaflet-interactive {
+  cursor: pointer;
+}

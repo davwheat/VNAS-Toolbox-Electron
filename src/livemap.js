@@ -3,14 +3,14 @@ require("leaflet-rotatedmarker");
 require("leaflet-arc");
 
 var BingLayer = L.TileLayer.extend({
-  getTileUrl: function(tilePoint) {
+  getTileUrl: function (tilePoint) {
     //this._adjustTilePoint(tilePoint);
     return L.Util.template(this._url, {
       s: this._getSubdomain(tilePoint),
       q: this._quadKey(tilePoint.x, tilePoint.y, this._getZoomForUrl())
     });
   },
-  _quadKey: function(x, y, z) {
+  _quadKey: function (x, y, z) {
     var quadKey = [];
     for (var i = z; i > 0; i--) {
       var digit = "0";
@@ -60,30 +60,24 @@ $("#liveMapToggleVnas").click(() => {
 });
 
 const osm = new L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-    attribution:
-      "Map data & imagery: <a href=\"#\" onclick=\"require('electron').shell.openExternal('https://openstreetmap.org')\">© OpenStreetMap contributors</a>",
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "Map data & imagery: <a href=\"#\" onclick=\"require('electron').shell.openExternal('https://openstreetmap.org')\">© OpenStreetMap contributors</a>",
     minZoom: 1,
     maxZoom: 19
   }
 );
 
 const openTopo = new L.tileLayer(
-  "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-  {
-    attribution:
-      "Map Data: <a href=\"#\" onclick=\"require('electron').shell.openExternal('https://openstreetmap.org/copyright')\">© OpenStreetMap contributors</a> | Imagery: <a href=\"#\" onclick=\"require('electron').shell.openExternal('http://opentopomap.org/')\">© OpenTopoMap</a> (<a href=\"#\" onclick=\"require('electron').shell.openExternal('https://creativecommons.org/licenses/by-sa/3.0/')\">CC-BY-SA</a>)",
+  "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+    attribution: "Map Data: <a href=\"#\" onclick=\"require('electron').shell.openExternal('https://openstreetmap.org/copyright')\">© OpenStreetMap contributors</a> | Imagery: <a href=\"#\" onclick=\"require('electron').shell.openExternal('http://opentopomap.org/')\">© OpenTopoMap</a> (<a href=\"#\" onclick=\"require('electron').shell.openExternal('https://creativecommons.org/licenses/by-sa/3.0/')\">CC-BY-SA</a>)",
     minZoom: 1,
     maxZoom: 17
   }
 );
 
 const satellite = new L.tileLayer(
-  "https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}{r}.jpg?key=FCxcrAwhY1uAsPwUr6r3",
-  {
-    attribution:
-      'Map Data: <a href="#" onclick="require(\'electron\').shell.openExternal(\'https://www.openstreetmap.org/copyright\')">© OpenStreetMap contributors</a> | Imagery: <a href="#" onclick="require(\'electron\').shell.openExternal(\'https://www.maptiler.com/copyright/\')" target="_blank">© MapTiler</a>',
+  "https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}{r}.jpg?key=FCxcrAwhY1uAsPwUr6r3", {
+    attribution: 'Map Data: <a href="#" onclick="require(\'electron\').shell.openExternal(\'https://www.openstreetmap.org/copyright\')">© OpenStreetMap contributors</a> | Imagery: <a href="#" onclick="require(\'electron\').shell.openExternal(\'https://www.maptiler.com/copyright/\')" target="_blank">© MapTiler</a>',
     tileSize: 512,
     minZoom: 1,
     maxZoom: 19,
@@ -92,13 +86,11 @@ const satellite = new L.tileLayer(
 );
 
 const bingSatellite = new BingLayer(
-  "http://r{s}.ortho.tiles.virtualearth.net/tiles/a{q}.jpeg?g=136",
-  {
+  "http://r{s}.ortho.tiles.virtualearth.net/tiles/a{q}.jpeg?g=136", {
     minZoom: 1,
     maxZoom: 19,
     subdomains: [0, 1, 2, 3],
-    attribution:
-      "<a href=\"#\" onclick=\"require('electron').shell.openExternal('http://bing.com/maps')\">© Bing Maps</a>"
+    attribution: "<a href=\"#\" onclick=\"require('electron').shell.openExternal('http://bing.com/maps')\">© Bing Maps</a>"
   }
 );
 
@@ -117,7 +109,10 @@ const leafletLiveMap = L.map("leafletMap", {
   maxBoundsViscosity: 0.5,
   zoomAnimationThreshold: 19
 });
-leafletLiveMap.setMaxBounds([[-90, -180], [90, 180]]);
+leafletLiveMap.setMaxBounds([
+  [-90, -180],
+  [90, 180]
+]);
 
 leafletLiveMap.attributionControl.setPrefix(false);
 
@@ -131,8 +126,12 @@ const icon = L.Icon.extend({
   }
 });
 
-const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
-  b788 = new icon({ iconUrl: "img/planes/787-icon.svg" });
+const b738 = new icon({
+    iconUrl: "img/planes/737-icon.svg"
+  }),
+  b788 = new icon({
+    iconUrl: "img/planes/787-icon.svg"
+  });
 
 {
   const VnasLiveMapApiUrl =
@@ -140,7 +139,9 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
 
   // P = Promise
   function GetAllNorwegianFlightsP() {
-    return Promise.resolve($.get({ url: VnasLiveMapApiUrl }));
+    return Promise.resolve($.get({
+      url: VnasLiveMapApiUrl
+    }));
   }
 
   function AddOwnFlightToMap() {
@@ -173,12 +174,12 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
     GetAllNorwegianFlightsP().then(f => {
       const flights = JSON.parse(f);
 
-      mapItems.forEach(marker => {
+      mapItems.forEach((marker, i) => {
         if (marker == undefined) return;
         leafletLiveMap.removeLayer(marker[0]);
-        leafletLiveMap.removeLayer(marker[1]);
-        leafletLiveMap.removeLayer(marker[2]);
       });
+
+      mapItems = [];
 
       Array.from(flights).forEach(flight => {
         // Skip user's own VNAS flight to prevent duplicate markers
@@ -203,16 +204,14 @@ const b738 = new icon({ iconUrl: "img/planes/737-icon.svg" }),
           ),
           L.Polyline.Arc(
             [flight.dep.lat, flight.dep.lng],
-            [flight.aircraft.lat, flight.aircraft.lng],
-            {
+            [flight.aircraft.lat, flight.aircraft.lng], {
               color: "#d81939",
               vertices: 250
             }
           ),
           L.Polyline.Arc(
             [flight.aircraft.lat, flight.aircraft.lng],
-            [flight.arr.lat, flight.arr.lng],
-            {
+            [flight.arr.lat, flight.arr.lng], {
               color: "#d81939",
               vertices: 250
             }
