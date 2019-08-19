@@ -22,8 +22,6 @@ autoUpdater.on("update-downloaded", info => {
 
 autoUpdater.checkForUpdates();
 
-const isFirstRun = require("electron-first-run")();
-
 debug();
 
 app.on("browser-window-created", function(e, window) {
