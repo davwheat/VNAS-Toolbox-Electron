@@ -39,7 +39,7 @@
     "electron-settings": "^3.2.0",
     "electron-updater": "^4.1.2",
     "fsuipc": "^0.3.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "leaflet": "^1.5.1",
     "leaflet-arc": "^1.0.2",
     "leaflet-rotatedmarker": "^0.2.0",
